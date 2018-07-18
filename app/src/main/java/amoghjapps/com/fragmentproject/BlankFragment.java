@@ -3,13 +3,20 @@ package amoghjapps.com.fragmentproject;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.Calendar;
 
 
 /**
@@ -28,6 +35,9 @@ public class BlankFragment extends Fragment {
     EditText message;
     ListView list;
     Button send;
+    ArrayList<Data> dataArrayList=new ArrayList<>();
+    Adapter adapter;
+
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -69,20 +79,28 @@ public class BlankFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String data=message.getText().toString();
-                mListener.passData1(data);
-            }
-        });
-        // Inflate the layout for this fragment
         View v=inflater.inflate(R.layout.fragment_blank, container, false);
-        // Inflate the layout for this fragment
-
         message=v.findViewById(R.id.message);
         send=v.findViewById(R.id.button3);
         list=v.findViewById(R.id.list);
+        adapter=new Adapter(getActivity(),dataArrayList);
+        list.setAdapter(adapter);
+        send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String data=message.getText().toString();
+                dataArrayList.add(new Data("Me",data));
+                adapter.notifyDataSetChanged();
+
+                mListener.passData1(data);
+
+            }
+        });
+        // Inflate the layout for this fragment
+        // Inflate the layout for this fragment
+
+
         return v;    }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -123,6 +141,10 @@ public class BlankFragment extends Fragment {
         void passData1(String data);
     }
     public void getData1(String data){
+        Toast.makeText(getContext(),data,Toast.LENGTH_SHORT).show();
+        dataArrayList.add(new Data("Frag2",data));
+        adapter.notifyDataSetChanged();
+
 
     }
 }

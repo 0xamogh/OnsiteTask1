@@ -3,13 +3,18 @@ package amoghjapps.com.fragmentproject;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 
 /**
@@ -28,6 +33,8 @@ public class BlankFragment2 extends Fragment {
     EditText message;
     ListView list;
     Button send;
+    ArrayList<Data> dataArrayList=new ArrayList<>();
+    Adapter adapter;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -69,20 +76,27 @@ public class BlankFragment2 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String data=message.getText().toString();
-                mListener.passData2(data);
-            }
-        });
-
         View v=inflater.inflate(R.layout.fragment_blank, container, false);
         // Inflate the layout for this fragment
+         adapter=new Adapter(getActivity(),dataArrayList);
+
 
         message=v.findViewById(R.id.message);
         send=v.findViewById(R.id.button3);
         list=v.findViewById(R.id.list);
+        list.setAdapter(adapter);
+
+        send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String data=message.getText().toString();
+                dataArrayList.add(new Data("Me",data));
+                adapter.notifyDataSetChanged();
+                mListener.passData2(data);
+            }
+        });
+
+
         return v;
 
     }
@@ -128,6 +142,9 @@ public class BlankFragment2 extends Fragment {
 
     }
     public void getData2(String data){
+        Toast.makeText(getContext(),data,Toast.LENGTH_SHORT).show();
+        dataArrayList.add(new Data("Frag1",data));
+        adapter.notifyDataSetChanged();
 
     }
 }
